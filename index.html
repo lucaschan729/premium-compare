@@ -1,0 +1,599 @@
+  <!DOCTYPE html>
+  <html lang="zh-HK">
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>整付 vs 5年繳預繳 回報對比</title>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+  <style>
+  :root{--navy:#0f172a;--navy2:#1e293b;--gold:#b45309;--gold2:#f59e0b;--soft:#fffbeb;--line:#e2e8f0;--line2:#cbd5e1;--mut:#64748b;--bg:#f4f6fb;--red:#dc2626;--teal:#0f766e;--blue:#1d4ed8}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"PingFang HK","Microsoft JhengHei","Noto Sans TC",sans-serif;background:var(--bg);color:var(--navy);-webkit-font-smoothing:antialiased;line-height:1.5}
+  header{background:radial-gradient(circle at 85% 0%,rgba(245,158,11,.28),transparent 45%),linear-gradient(135deg,#0f172a,#1e293b 60%,#273449);color:#fff;padding:40px 20px 76px}
+  .hd{max-width:1120px;margin:0 auto}
+  header h1{margin:0 0 8px;font-size:30px;letter-spacing:1px}
+  header h1 span{color:var(--gold2)}
+  header p{margin:0;color:#cbd5e1;font-size:14px}
+  main{max-width:1120px;margin:-48px auto 0;padding:0 14px 48px}
+  section{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 6px 20px rgba(15,23,42,.05)}
+  h2{margin:0 0 16px;font-size:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  h2 i{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#fff;font-size:14px;font-weight:700;flex:none}
+  h2 small{font-weight:400;color:var(--mut);font-size:12px}
+  .hide{display:none!important}
+  input[type=text],input[type=number],select,textarea{border:1px solid var(--line2);border-radius:9px;padding:8px 10px;font-size:14px;font-family:inherit;background:#fff;color:var(--navy);outline:none;transition:.15s}
+  input:focus,select:focus,textarea:focus{border-color:var(--gold2);box-shadow:0 0 0 3px rgba(245,158,11,.18)}
+  textarea{width:100%;min-height:90px;margin-top:8px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+  .fd{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fcfcfe}
+  .fd label{display:block;font-size:12px;color:var(--mut);margin-bottom:6px}
+  .fd input{width:100%;font-size:17px;font-weight:700}
+  .fd .hint{font-size:12px;color:var(--teal);margin-top:6px;min-height:18px}
+  .modebar{position:sticky;top:8px;z-index:30;margin-bottom:18px}
+  .tabs{display:flex;background:#fff;border:1px solid var(--line);border-radius:14px;padding:5px;box-shadow:0 8px 24px rgba(15,23,42,.12)}
+  .tabs button{flex:1;border:0;background:transparent;padding:11px;border-radius:10px;font-size:15px;font-weight:700;color:var(--mut);cursor:pointer;font-family:inherit;transition:.15s}
+  .tabs button.on{background:var(--navy);color:#fff}
+  .sel{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+  .sel b{font-size:28px}
+  .sel span{font-size:18px;color:var(--gold);font-weight:700}
+  input[type=range]{width:100%;accent-color:var(--gold2);margin:8px 0}
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+  .chips button,.btn{border:1px solid var(--line2);background:#fff;border-radius:999px;padding:7px 14px;font-size:13px;cursor:pointer;color:var(--navy);font-family:inherit;transition:.15s}
+  .chips button:hover,.btn:hover{border-color:var(--navy)}
+  .chips button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  #cols button.on{background:var(--gold);border-color:var(--gold);font-weight:600}
+  .btn.pri{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:600}
+  .btn.gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#fff;border-color:transparent;font-weight:700;padding:10px 22px;font-size:15px}
+  .step{border:1px solid var(--line);border-radius:14px;padding:14px 16px 4px;margin-bottom:12px;background:#fcfcfe}
+  .sl{font-size:14px;font-weight:700;margin-bottom:10px}
+  .sl small{font-weight:400;color:var(--mut)}
+  .duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-bottom:14px}
+  .pn{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fcfcfe}
+  .pn.A{border-top:4px solid var(--blue)}
+  .pn.B{border-top:4px solid var(--gold)}
+  .ph{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .ph small{color:var(--mut);font-size:13px}
+  .tag{display:inline-block;min-width:64px;text-align:center;padding:4px 12px;border-radius:999px;color:#fff;font-weight:700;font-size:12px}
+  .tag.A{background:var(--blue)}.tag.B{background:var(--gold)}.tag.E{background:var(--mut)}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+  .tile{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff}
+  .tile small{display:block;color:var(--mut);font-size:12px;margin-bottom:2px}
+  .tile b{font-size:17px}
+  .tile.hi{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fcd34d}
+  .tile.hi b{color:var(--gold)}
+  .foot{font-size:14px;font-weight:600;background:var(--soft);border:1px solid #fcd34d;border-radius:10px;padding:10px 14px;line-height:1.9}
+  .foot small{font-weight:400;color:var(--mut)}
+  .tw{overflow-x:auto;border:1px solid var(--line2);border-radius:12px}
+  .tw.tall{max-height:70vh;overflow:auto}
+  table{border-collapse:collapse;width:100%;font-size:14px;white-space:nowrap}
+  th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line);border-right:1px solid var(--line)}
+  th:last-child,td:last-child{border-right:0}
+  tbody tr:last-child td{border-bottom:0}
+  thead th{background:var(--navy);color:#fff;font-size:13px;font-weight:600;text-align:center;position:sticky;top:0;z-index:2}
+  th.ha{background:var(--blue)}th.hb{background:var(--gold)}
+  tbody tr:nth-child(even) td{background:#f8fafc}
+  tbody td:first-child{font-weight:700;text-align:center}
+  td.best{background:var(--soft)!important;color:var(--gold);font-weight:700}
+  td.neg{color:var(--red)}
+  td.ctr{text-align:center}
+  tr.cur td{background:#fef3c7!important}
+  tr.pick{cursor:pointer}
+  tr.pick:hover td{background:#fffbeb}
+  .note{font-size:12px;color:var(--mut);margin-top:10px;line-height:1.7}
+  label.ck{font-size:13px;display:inline-flex;align-items:center;gap:4px}
+  .drop{display:block;border:2px dashed var(--gold2);background:var(--soft);border-radius:14px;padding:26px 20px;text-align:center;cursor:pointer;font-weight:600;transition:.15s}
+  .drop:hover,.drop.over{background:#fef3c7;transform:translateY(-1px)}
+  .drop small{display:block;font-weight:400;color:var(--mut);margin-top:4px}
+  .drop input{display:none}
+  .status{margin-top:10px;font-size:13px;color:var(--mut);line-height:1.7}
+  .cov{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:12px}
+  .calc{background:var(--bg);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.9}
+  .calc summary{cursor:pointer;font-weight:600;color:var(--mut)}
+  #toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:10px 22px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:99;box-shadow:0 8px 24px rgba(15,23,42,.3)}
+  #toast.on{opacity:1;transform:translateX(-50%)}
+  @media(max-width:600px){header h1{font-size:24px}section{padding:16px}th,td{padding:8px 9px;font-size:13px}}
+  </style>
+  </head>
+  <body>
+  <header><div class="hd"><h1>整付 vs 5年繳預繳<span> 回報對比</span></h1><p>環宇盈活儲蓄保險計劃｜輸入扣除優惠後的實付金額，按建議書原數比較「不提取」及「提取」兩種情況的單利與 IRR。</p></div></header>
+  <main>
+
+  <section>
+    <h2><i>1</i>實付金額 <small>扣除優惠後、於第 0 年一次過付出的金額（美元）</small></h2>
+    <div class="fg">
+      <div class="fd"><label>名義總保費</label><input type="number" id="nominal" value="150000"><div class="hint"></div></div>
+      <div class="fd"><label><span class="tag A">整付</span>　優惠後實付</label><input type="number" id="paidA" value="145561"><div class="hint" id="discA"></div></div>
+      <div class="fd"><label><span class="tag B">5年繳預繳</span>　優惠後一次過實付</label><input type="number" id="paidB" value="121077"><div class="hint" id="discB"></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><i>2</i>匯入建議書 <small>自動分辨「不提取」與「提取」、整付與 5 年繳</small></h2>
+    <label class="drop" id="drop">📄 點此選擇或拖放建議書 PDF<small>可選多份；匯入的數據會取代該方案同一情景的內置數據</small><input type="file" id="pdf" accept="application/pdf" multiple></label>
+    <div class="row" style="margin-top:12px;font-size:13px">
+      <span>方案</span><select id="force"><option value="">自動判斷</option><option value="A">整付</option><option value="B">5年繳</option></select>
+      <span>投保年齡</span><input type="number" id="issueAge" value="7" style="width:80px">
+      <button class="btn" id="btnReset">還原內置數據</button>
+    </div>
+    <div class="status" id="status">尚未匯入，現正使用內置數據。</div>
+    <div class="cov" id="coverage"></div>
+    <details class="calc" style="margin-top:12px"><summary>PDF 讀取不到？改為貼上文字</summary>
+      <textarea id="paste" placeholder="把「詳細說明」或「現金提取舉例」頁面的文字貼在這裡（每次貼一份建議書）"></textarea>
+      <div class="row" style="margin-top:8px"><button class="btn pri" id="btnPaste">識別貼上的文字</button></div>
+    </details>
+    <div class="note">不提取：識別「詳細說明」表（12 欄），取退保發還「總額」。提取：識別「現金提取舉例」表（9 欄），取提取後退保發還「總額」及每年提取金額。<br>每行都會核對 (A)+(B)+(C) 是否等於總額，不符的行不會採用；標明悲觀／樂觀情景的頁面會略過。</div>
+  </section>
+
+  <div class="modebar"><div class="tabs"><button id="mN">不提取</button><button id="mW" class="on">提取</button></div></div>
+
+  <section>
+    <h2><i>3</i>所選年度對比</h2>
+    <div class="sel"><b id="yr"></b><span id="ag"></span></div>
+    <input type="range" id="sl" min="0" max="0" value="0">
+    <div class="chips" id="chips"></div>
+    <div class="duo" id="duo"></div>
+    <div class="foot" id="verdict"></div>
+    <div class="row" style="margin-top:12px;font-size:13px"><span>重點保單年度</span><input type="text" id="ms" value="5,10,15,20,25,30,40,50,58,60,70,80,93" style="flex:1;min-width:200px"></div>
+  </section>
+
+  <section>
+    <h2><i>4</i>逐年對比表</h2>
+    <div class="step">
+      <div class="sl">對比哪些事項？<small>（可多選，點擊加入或移出）</small></div>
+      <div class="chips" id="cols"></div>
+    </div>
+    <div class="row" style="margin-bottom:10px">
+      <label class="ck"><input type="checkbox" id="full" checked> 顯示全部年度</label>
+      <button class="btn" id="colAll">全選事項</button>
+      <button class="btn" id="colDef">預設事項</button>
+      <button class="btn pri" id="tbCopy">複製表格</button>
+    </div>
+    <div class="tw tall"><table id="tb"><thead></thead><tbody></tbody></table></div>
+    <div class="note">★ 及金色底為該年度回報倍數／單利／IRR 較高的方案（金額類事項因兩方案本金不同，不作標示）；「—」＝該年度沒有建議書數字；點擊任何一行可選擇該年度。<br>「同本金下 5年繳總回報」＝假設把與整付相同的金額全部投入 5 年繳預繳方案（按比例放大），顯示「退保價值＋累計提取」。</div>
+  </section>
+
+  <section>
+    <h2><i>5</i>匯出 Excel <small>給客戶看的對比報告</small></h2>
+    <div class="row">
+      <span style="font-size:13px">客戶名稱（可不填）</span>
+      <input type="text" id="client" placeholder="例如：陳先生" style="flex:1;min-width:180px">
+      <button class="btn gold" id="xl">⬇ 匯出 Excel</button>
+    </div>
+    <div class="note">檔案包含三個分頁：<b>摘要</b>（實付金額、「不提取」及「提取」的重點年度對比和結論）、<b>不提取逐年對比</b>、<b>提取逐年對比</b>。<br>摘要的重點年度跟隨第 3 部分的「重點保單年度」；實付金額跟隨第 1 部分。</div>
+  </section>
+
+  <section><details class="calc"><summary>計算方法（點擊展開）</summary><div>
+    • 總回報 ＝ 該年退保價值 ＋ 累計已提取金額<br>
+    • 淨賺 ＝ 總回報 − 實付保費<br>
+    • 回報倍數 ＝ 淨賺 ÷ 實付保費<br>
+    • 單利（年化）＝ 回報倍數 ÷ 年數<br>
+    • IRR 複利：第 0 年一次過付出實付保費；提取情景下按建議書每年末收取提取金額；於該年末退保取回退保價值，求令淨現值為 0 的年回報率<br>
+    • 5 年繳預繳方案首 1–4 年的退保價值未包括尚未動用的預繳保費餘額<br>
+    • 全部為建議書「現時預計情景」數字，紅利屬非保證，實際金額可能較高或較低
+  </div></details></section>
+  </main>
+  <div id="toast"></div>
+
+  <script>
+  /* ===== 內置數據（建議書原數）===== */
+  const AN=[84471,85326,91438,126804,166931,184944,197079,210652,228504,246221,
+    262708,280242,298801,319191,341620,366415,393661,423678,455190,487171,
+    526983,565139,606643,652056,701246,754887,809354,865994,929364,992158,
+    1056648,1125330,1198477,1276378,1359342,1447700,1541800,1642017,1748748,1862417,
+    1983474,2112400,2249706,2395937,2551673,2717531,2894171,3082292,3282641,3496013,
+    3723254,3965265,4223008,4497503,4789841,5101181,5432757,5785887,6161969,6562497,
+    6989060,7443349,7927166,8442432,8991190,9575618,10198033,10860905,11566864,12318710,
+    13119426,13972189,14880381,15847606,16877701,17974751,19143110,20387412,21712594,23123913,
+    24626967,26227720,27932522,29748136,31681764,33741079,35934249,38269976,40757524,43406763,
+    46228203,49233036,52433183];
+  const AW=[84471,85326,91438,126804,166931,184944,197079,210652,228504,246221,
+    249708,253547,257531,262249,267771,274246,281352,289333,297316,304640,
+    315932,325171,335377,346768,359168,372832,385875,398971,414205,429512,
+    443300,457980,473576,490045,507611,526165,545857,566705,588795,614051,
+    640984,669630,700091,732651,767194,804044,843233,885024,929505,976886,
+    1027361,1081084,1138266,1199201,1264105,1333177,1406785,1485180,1568685,1657564,
+    1752275,1853056,1960472,2074798,2196567,2326267,2464386,2611509,2768103,2934958,
+    3112595,3301826,3503378,3717941,3946549,4189919,4449099,4725216,5019219,5746983,
+    6245959,6792924,7392822,8050971,8773503,9566988,10438842,11286849,12007495,12774982,
+    13592356,14462859,15389945];
+  const BW=[31,31,15083,37649,70256,131460,151008,174181,186085,196717,
+    197938,199207,200756,202874,204908,208095,211545,217894,222104,225581,
+    233711,241833,251129,258040,265571,273498,281628,287758,293597,305371,
+    311737,318375,325693,333413,341598,350302,359482,369280,379562,391832,
+    404811,418757,433478,449262,466077,483971,502990,523312,546479,569394,
+    593697,619632,647245,676709,708007,741375,776922,814816,855109,898030,
+    943749,992495,1044354,1099583,1158472,1221138,1287872,1358966,1434635,1515297,
+    1601184,1692620,1790073,1893799,2004274,2121978,2247288,2380804,2522914,2792315,
+    3031201,3293399,3581339,3897755,4245580,4628168,5049191,5512651,6023149,6585743,
+    7206109,7890404,8645644];
+  const BN0={15:278269,20:404826,25:614944,30:878217,40:1648535,50:3094528,58:5121430,
+    60:5808854,68:9613629,70:10904019,73:13171505,78:18046104,80:20468342,90:38421893,93:46411711};
+
+  function builtin(){
+    const d={A:{n:{},w:{},wd:{}},B:{n:{},w:{},wd:{}}};
+    AN.forEach((v,i)=>d.A.n[i+1]=v);
+    AW.forEach((v,i)=>{d.A.w[i+1]=v;d.A.wd[i+1]=i+1>=11?13000:0;});
+    BW.forEach((v,i)=>{d.B.w[i+1]=v;d.B.wd[i+1]=i+1>=11?13000:0;});
+    for(let n=1;n<=10;n++)d.B.n[n]=BW[n-1];
+    Object.assign(d.B.n,BN0);
+    return d;
+  }
+  const KEY='aiaCompareData_v1';
+  function load(){try{const s=localStorage.getItem(KEY);return s?JSON.parse(s):null;}catch(e){return null;}}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(D));}catch(e){}}
+  let D=load()||builtin(),mode='w',sel=30,R=[];
+
+  const $=id=>document.getElementById(id);
+  const fmt=n=>n==null?'—':Math.round(n).toLocaleString('en-US');
+  const pct=x=>x==null||!isFinite(x)?'—':(x*100).toFixed(2)+'%';
+  const mul=x=>x==null||!isFinite(x)?'—':x.toFixed(2)+' 倍';
+  const NAME={A:'整付',B:'5年繳'};
+  function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),1600);}
+
+  /* ===== 第 4 部分可選擇的對比事項 ===== */
+  const MET=[
+    {k:'cum',n:'累計提取',w:1,one:r=>r.a!=null?r.cA:r.cB,f:fmt},
+    {k:'sv',n:'退保價值',A:r=>r.a,B:r=>r.b,f:fmt},
+    {k:'tot',n:'總回報',A:r=>r.tA,B:r=>r.tB,f:fmt},
+    {k:'net',n:'淨賺',A:r=>r.nA,B:r=>r.nB,f:fmt},
+    {k:'mult',n:'回報倍數',A:r=>r.mA,B:r=>r.mB,f:mul,best:1,eps:0.005},
+    {k:'simple',n:'單利',A:r=>r.sA,B:r=>r.sB,f:pct,best:1,eps:0.00005},
+    {k:'irr',n:'IRR 複利',A:r=>r.iA,B:r=>r.iB,f:pct,best:1,eps:0.00005},
+    {k:'winS',n:'單利較高',win:['sA','sB']},
+    {k:'winI',n:'IRR 較高',win:['iA','iB']},
+    {k:'scaled',n:'同本金下 5年繳總回報',one:r=>r.scaled,f:fmt}
+  ];
+  const KDEF=['cum','sv','simple','irr','winS','winI'];
+  let K=KDEF.slice();
+
+  /* ===== 建議書識別 ===== */
+  function scanNums(nums){
+    const out=[];let i=0;
+    const near=(a,b)=>Math.abs(a-b)<=2;
+    const base=t=>Number.isInteger(t[1])&&t[1]>=1&&t[1]<=130&&t[0]-t[1]>=0&&t[0]-t[1]<=80&&t[2]>=100;
+    while(i<nums.length){
+      const t=nums.slice(i,i+12);
+      if(t.length===12&&base(t)&&near(t[3]+t[4]+t[5],t[6])&&near(t[3]+t[8]+t[9],t[10])&&t[11]>=t[10]){
+        out.push({k:'n',age:t[0],yr:t[1],prem:t[2],v:t[6]});i+=12;continue;
+      }
+      if(t.length>=9&&base(t)&&near(t[5]+t[6]+t[7],t[8])){
+        out.push({k:'w',age:t[0],yr:t[1],prem:t[2],wd:t[3],v:t[8]});i+=9;continue;
+      }
+      i++;
+    }
+    return out;
+  }
+  function analyse(pages,isPdf,force){
+    const rows=[];let all='';
+    pages.forEach(txt=>{
+      const flat=txt.replace(/\s+/g,'');all+=flat;
+      const cjk=/[\u4e00-\u9fff]/.test(flat);
+      if(isPdf&&cjk&&/(悲觀|悲观|樂觀|乐观)情景/.test(flat))return;
+      const okW=!isPdf||!cjk||/提取[後后]之退保[發发][還还]金[額额]/.test(flat);
+      const nums=(txt.match(/\d[\d,]*/g)||[]).map(s=>+s.replace(/,/g,''));
+      scanNums(nums).forEach(r=>{if(r.k==='n'||okW)rows.push(r);});
+    });
+    if(!rows.length)return{ok:false,msg:'找不到符合格式的表格行。'};
+    let plan=force||null,how='手動指定';
+    if(!plan){
+      const p1=rows.find(r=>r.yr===1),p2=rows.find(r=>r.yr===2&&(!p1||r.k===p1.k));
+      if(p1&&p2){plan=p2.prem>p1.prem*1.5?'B':'A';how='按首兩年繳付保費判斷';}
+      else{
+        const a=(all.match(/整付保[費费]/g)||[]).length,b=(all.match(/\d年[繳缴][費费]/g)||[]).length;
+        if(a||b){plan=a>=b?'A':'B';how='按文件名稱判斷';}
+      }
+    }
+    if(!plan)return{ok:false,msg:'未能判斷是整付還是 5 年繳，請在「方案」選擇後再試。'};
+    const nw={n:{},w:{},wd:{}};let conflict=0,age0=null;
+    rows.forEach(r=>{
+      const m=nw[r.k];
+      if(m[r.yr]!=null){if(m[r.yr]!==r.v)conflict++;return;}
+      m[r.yr]=r.v;if(r.k==='w')nw.wd[r.yr]=r.wd;
+      if(age0==null)age0=r.age-r.yr;
+    });
+    const cn=Object.keys(nw.n).length,cw=Object.keys(nw.w).length;
+    if(cn)D[plan].n=nw.n;
+    if(cw){D[plan].w=nw.w;D[plan].wd=nw.wd;}
+    if(age0!=null)$('issueAge').value=age0;
+    save();
+    return{ok:true,msg:`${NAME[plan]}（${how}）：不提取 ${cn} 年、提取 ${cw} 年`+(conflict?`；有 ${conflict} 行與先前識別的數字不同，已保留先出現的數字，請核對`:'')};
+  }
+  async function readPdf(file){
+    pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+    const pdf=await pdfjsLib.getDocument({data:await file.arrayBuffer(),cMapUrl:'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/cmaps/',cMapPacked:true}).promise;
+    const pages=[];
+    for(let p=1;p<=pdf.numPages;p++){
+      const tc=await(await pdf.getPage(p)).getTextContent();
+      const items=tc.items.filter(i=>i.str&&i.str.trim()).map(i=>({s:i.str,x:i.transform[4],y:i.transform[5]}));
+      items.sort((a,b)=>b.y-a.y||a.x-b.x);
+      const lines=[];let cur=null;
+      items.forEach(it=>{if(!cur||Math.abs(cur.y-it.y)>3){cur={y:it.y,a:[]};lines.push(cur);}cur.a.push(it);});
+      pages.push(lines.map(l=>l.a.sort((a,b)=>a.x-b.x).map(i=>i.s).join(' ')).join('\n'));
+    }
+    return pages;
+  }
+  async function handle(files){
+    const msgs=[];$('status').textContent='讀取中，請稍候…';
+    for(const f of files){
+      try{
+        if(typeof pdfjsLib==='undefined')throw new Error('PDF 元件未能載入');
+        const r=analyse(await readPdf(f),true,$('force').value);
+        msgs.push((r.ok?'✅ ':'⚠️ ')+f.name+'：'+r.msg);
+      }catch(err){msgs.push('⚠️ '+f.name+'：讀取失敗（'+err.message+'），可改用貼上文字。');}
+    }
+    $('status').innerHTML=msgs.join('<br>')||'沒有選擇檔案。';
+    render();
+  }
+
+  /* ===== 計算 ===== */
+  function irr(paid,n,sv,wd){
+    const npv=r=>{
+      let v=-paid+sv/Math.pow(1+r,n);
+      if(wd)for(let t=1;t<=n;t++)if(wd[t])v+=wd[t]/Math.pow(1+r,t);
+      return v;
+    };
+    let lo=-0.99,hi=1;
+    for(let i=0;i<80;i++){const m=(lo+hi)/2;if(npv(m)>0)lo=m;else hi=m;}
+    return(lo+hi)/2;
+  }
+  /* md：'n' 不提取／'w' 提取；不指定時用目前選中的情景 */
+  function calc(pA,pB,md){
+    md=md||mode;
+    const A=D.A[md],B=D.B[md],wdA=md==='w'?D.A.wd:null,wdB=md==='w'?D.B.wd:null;
+    const ys=[...new Set([...Object.keys(A),...Object.keys(B)].map(Number))].sort((a,b)=>a-b);
+    const rows=[];let cA=0,cB=0,yi=0;
+    const maxY=ys.length?ys[ys.length-1]:0;
+    for(let n=1;n<=maxY;n++){
+      if(wdA)cA+=wdA[n]||0;
+      if(wdB)cB+=wdB[n]||0;
+      if(ys[yi]!==n)continue;yi++;
+      const a=A[n],b=B[n];
+      rows.push({n,a,b,cA,cB,
+        tA:a==null?null:a+cA,tB:b==null?null:b+cB,
+        nA:a==null?null:a+cA-pA,nB:b==null?null:b+cB-pB,
+        mA:a==null?null:(a+cA-pA)/pA,mB:b==null?null:(b+cB-pB)/pB,
+        sA:a==null?null:(a+cA-pA)/pA/n,sB:b==null?null:(b+cB-pB)/pB/n,
+        iA:a==null?null:irr(pA,n,a,wdA),iB:b==null?null:irr(pB,n,b,wdB),
+        scaled:b==null?null:(b+cB)*pA/pB});
+    }
+    return rows;
+  }
+  const plist=s=>[...new Set(s.split(/[,，、\s]+/).map(Number).filter(v=>Number.isInteger(v)&&v>0))].sort((x,y)=>x-y);
+
+  /* ===== 顯示 ===== */
+  function render(){
+    const age0=+$('issueAge').value||0,nominal=+$('nominal').value||0,pA=+$('paidA').value||1,pB=+$('paidB').value||1,w=mode==='w';
+    $('discA').textContent=nominal?`優惠約 ${pct(1-pA/nominal)}（節省 ${fmt(nominal-pA)}）`:'';
+    $('discB').textContent=nominal?`優惠約 ${pct(1-pB/nominal)}（節省 ${fmt(nominal-pB)}）`:'';
+    $('mN').classList.toggle('on',!w);$('mW').classList.toggle('on',w);
+    const cnt=o=>Object.keys(o).length;
+    $('coverage').innerHTML=[['整付｜不提取',D.A.n],['整付｜提取',D.A.w],['5年繳｜不提取',D.B.n],['5年繳｜提取',D.B.w]]
+      .map(q=>`<div class="tile"><small>${q[0]}</small><b>${cnt(q[1])} 個年度</b></div>`).join('');
+    R=calc(pA,pB);
+    if(!R.length){$('yr').textContent='沒有數據';$('ag').textContent='';$('chips').innerHTML='';$('duo').innerHTML='';$('verdict').textContent='此情景沒有數據，請匯入建議書。';$('tb').querySelector('tbody').innerHTML='';return;}
+    let i=R.findIndex(r=>r.n>=sel);if(i<0)i=R.length-1;sel=R[i].n;const r=R[i];
+    $('sl').max=R.length-1;$('sl').value=i;
+    $('yr').textContent='保單年度 '+r.n;$('ag').textContent=(r.n+age0)+' 歲';
+    const M=plist($('ms').value);
+    $('chips').innerHTML=R.filter(x=>M.includes(x.n)).map(x=>`<button data-y="${x.n}" class="${x.n===sel?'on':''}">第${x.n}年（${x.n+age0}歲）</button>`).join('');
+
+    const beA=R.find(x=>x.a!=null&&x.a+x.cA>=pA),beB=R.find(x=>x.b!=null&&x.b+x.cB>=pB);
+    const T=(l,v,hi)=>`<div class="tile${hi?' hi':''}"><small>${l}</small><b>${v}</b></div>`;
+    const panel=(k,name,paid,v,c,m,s,ir,be)=>`<div class="pn ${k}"><div class="ph"><span class="tag ${k}">${name}</span><small>實付 ${fmt(paid)}</small></div>`+
+      (v==null?'<div class="note">此年度沒有建議書數字。</div>':'<div class="tiles">'+
+        T(w?'提取後退保價值':'退保價值',fmt(v))+(w?T('累計已提取',fmt(c)):'')+T('總回報',fmt(v+c))+T('淨賺',fmt(v+c-paid),1)+
+        T('回報倍數',mul(m))+T('單利',pct(s),1)+T('IRR 複利',pct(ir),1)+T('回本年度',be?'第 '+be.n+' 年':'未回本')+'</div>')+'</div>';
+    $('duo').innerHTML=panel('A','整付',pA,r.a,r.cA,r.mA,r.sA,r.iA,beA)+panel('B','5年繳預繳',pB,r.b,r.cB,r.mB,r.sB,r.iB,beB);
+
+    const both=R.filter(x=>x.iA!=null&&x.iB!=null),ok=x=>x.b+x.cB>=pB;
+    const crossI=both.find(x=>x.iB>x.iA&&ok(x)),crossS=both.find(x=>x.sB>x.sA&&ok(x));
+    const cmp=(a,b)=>Math.abs(a-b)<0.00005?'兩者相若':a>b?'整付較高':'5年繳預繳較高';
+    let v='';
+    if(r.iA!=null&&r.iB!=null){
+      v=`第 ${r.n} 年（${r.n+age0} 歲）<br>`+
+        `IRR 複利：${cmp(r.iA,r.iB)}（整付 ${pct(r.iA)}｜5年繳 ${pct(r.iB)}）<br>`+
+        `單利：${cmp(r.sA,r.sB)}（整付 ${pct(r.sA)}｜5年繳 ${pct(r.sB)}）<br>`+
+        `同本金下 5年繳總回報 ${fmt(r.scaled)}｜整付總回報 ${fmt(r.tA)}<br>`;
+    }else v=`第 ${r.n} 年：其中一個方案沒有建議書數字，未能比較。<br>`;
+    v+=`<small>本金差額：整付多付 ${fmt(pA-pB)}｜5年繳開始超越整付：IRR ${crossI?'第 '+crossI.n+' 年':'未出現'}、單利 ${crossS?'第 '+crossS.n+' 年':'未出現'}｜5年繳較高的年數：IRR ${both.filter(x=>x.iB>x.iA).length}／${both.length}、單利 ${both.filter(x=>x.sB>x.sA).length}／${both.length}</small>`;
+    $('verdict').innerHTML=v;
+
+    table(age0);
+  }
+  function drawCols(){
+    const w=mode==='w';
+    $('cols').innerHTML=MET.filter(m=>!m.w||w).map(m=>{const on=K.includes(m.k);return`<button data-k="${m.k}" class="${on?'on':''}">${on?'✓ ':''}${m.n}</button>`;}).join('');
+  }
+  function table(age0){
+    drawCols();
+    if(!R.length)return;
+    if(age0==null)age0=+$('issueAge').value||0;
+    const w=mode==='w',full=$('full').checked,last=R[R.length-1].n;
+    const ms=MET.filter(m=>K.includes(m.k)&&(!m.w||w));
+    let h='<th>年度</th><th>年齡</th>';
+    ms.forEach(m=>{h+=m.A?`<th class="ha">${m.n}<br>整付</th><th class="hb">${m.n}<br>5年繳</th>`:`<th>${m.n}</th>`;});
+    $('tb').querySelector('thead').innerHTML='<tr>'+h+'</tr>';
+    const cell=(x,m,best)=>x==null?'<td>—</td>':`<td class="${best?'best':''}${x<0?' neg':''}">${best?'★ ':''}${m.f(x)}</td>`;
+    $('tb').querySelector('tbody').innerHTML=R.filter(r=>full||r.n<=10||r.n%5===0||r.n===last||r.n===sel).map(r=>{
+      let c=`<td>第 ${r.n} 年</td><td class="ctr">${r.n+age0} 歲</td>`;
+      ms.forEach(m=>{
+        if(m.A){
+          const a=m.A(r),b=m.B(r),ok=m.best&&a!=null&&b!=null&&Math.abs(a-b)>=m.eps;
+          c+=cell(a,m,ok&&a>b)+cell(b,m,ok&&b>a);
+        }else if(m.win){
+          const a=r[m.win[0]],b=r[m.win[1]];
+          c+='<td class="ctr">'+(a==null||b==null?'—':Math.abs(a-b)<0.00005?'<span class="tag E">相若</span>':a>b?'<span class="tag A">整付</span>':'<span class="tag B">5年繳</span>')+'</td>';
+        }else c+=cell(m.one(r),m,false);
+      });
+      return`<tr class="pick${r.n===sel?' cur':''}" data-y="${r.n}">${c}</tr>`;
+    }).join('');
+  }
+
+  /* ===== 匯出 Excel ===== */
+  const X={navy:'FF0F172A',gold:'FFB45309',blue:'FF1D4ED8',teal:'FF0F766E',soft:'FFFFFBEB',key:'FFFEF3C7',zeb:'FFF8FAFC',ln:'FFD5DCE6',wh:'FFFFFFFF',mut:'FF64748B'};
+  const GC={S:{d:X.navy,l:'FFE2E8F0'},A:{d:X.blue,l:'FFDBEAFE'},B:{d:X.gold,l:'FFFEF3C7'},C:{d:X.teal,l:'FFCCFBF1'}};
+  const FN='Arial';
+  const fill=c=>({type:'pattern',pattern:'solid',fgColor:{argb:c}});
+  const bd={style:'thin',color:{argb:X.ln}},BD={top:bd,left:bd,bottom:bd,right:bd};
+  const wbd={style:'medium',color:{argb:X.wh}},WB={left:wbd,right:wbd};
+  const NF={n:'#,##0;[Red]-#,##0',p:'0.00%;[Red]-0.00%',x:'0.00"倍";[Red]-0.00"倍"'};
+  function xInit(ws,title,sub,ncol,tab){
+    for(let i=1;i<=ncol;i++)ws.getColumn(i).width=15;
+    ws.getColumn(1).width=12;ws.getColumn(2).width=9;
+    ws.mergeCells(1,1,1,ncol);let c=ws.getCell(1,1);c.value=title;c.font={name:FN,bold:true,size:18,color:{argb:X.wh}};c.fill=fill(X.navy);c.alignment={vertical:'middle',indent:1};ws.getRow(1).height=38;
+    ws.mergeCells(2,1,2,ncol);c=ws.getCell(2,1);c.value=sub;c.font={name:FN,size:10,bold:true,color:{argb:X.wh}};c.fill=fill(X.gold);c.alignment={vertical:'middle',indent:1};ws.getRow(2).height=22;
+    ws.getRow(3).height=8;
+    ws.pageSetup={orientation:'landscape',paperSize:9,fitToPage:true,fitToWidth:1,fitToHeight:0,margins:{left:0.4,right:0.4,top:0.5,bottom:0.5,header:0.2,footer:0.2}};
+    ws.headerFooter.oddFooter='&C第 &P 頁，共 &N 頁';
+    ws.properties.tabColor={argb:tab};
+  }
+  function xCards(ws,r,cards,span){
+    cards.forEach((q,i)=>{const c1=i*span+1,c2=c1+span-1;
+      [0,1,2].forEach(d=>{ws.mergeCells(r+d,c1,r+d,c2);const c=ws.getCell(r+d,c1);c.value=q[d];c.fill=fill(X.soft);c.border=WB;c.alignment={horizontal:'center',vertical:'middle'};
+        c.font=d===1?{name:FN,bold:true,size:15,color:{argb:q[3]||X.gold}}:{name:FN,size:9,color:{argb:X.mut}};});});
+    ws.getRow(r).height=20;ws.getRow(r+1).height=30;ws.getRow(r+2).height=18;ws.getRow(r+3).height=10;return r+4;
+  }
+  function xCell(c,v,t,st){
+    const bad=v==null||(typeof v==='number'&&!isFinite(v));
+    c.value=bad?'—':v;c.border=BD;
+    if(NF[t]&&!bad)c.numFmt=st.best?'"★ "'+NF[t].split(';')[0]:NF[t];
+    c.alignment={horizontal:bad||t==='c'||t==='w'?'center':'right',vertical:'middle'};
+    let color=X.navy,bold=!!st.bold;
+    if(t==='w'&&!bad){bold=true;color=v==='整付'?X.blue:v==='5年繳'?X.gold:X.mut;}
+    if(st.best){bold=true;color=X.gold;}
+    c.font={name:FN,size:11,bold,color:{argb:color}};
+    const f=st.best?X.key:st.zeb?X.zeb:null;if(f)c.fill=fill(f);
+  }
+  /* 欄位定義；brief：摘要用的精簡版 */
+  function xCols(w,brief){
+    const c=[{h:'保單年度',t:'c',g:'S',v:r=>'第 '+r.n+' 年',bold:1},{h:'年齡',t:'c',g:'S',v:(r,a)=>(r.n+a)+' 歲'}];
+    if(w)c.push({h:'累計提取',t:'n',g:'S',v:r=>r.a!=null?r.cA:r.cB});
+    const hi=(x,y)=>x!=null&&y!=null&&x-y>=0.00005;
+    ['A','B'].forEach(g=>{const o=g==='A'?'B':'A',sv=g==='A'?'a':'b';
+      c.push({h:w?'提取後\n退保價值':'退保價值',t:'n',g,v:r=>r[sv]});
+      if(w&&!brief)c.push({h:'總回報\n（退保＋提取）',t:'n',g,v:r=>r['t'+g]});
+      c.push({h:'淨賺',t:'n',g,v:r=>r['n'+g]});
+      if(!brief)c.push({h:'回報倍數',t:'x',g,v:r=>r['m'+g]});
+      c.push({h:'單利',t:'p',g,v:r=>r['s'+g],best:r=>hi(r['s'+g],r['s'+o])});
+      c.push({h:'IRR 複利',t:'p',g,v:r=>r['i'+g],best:r=>hi(r['i'+g],r['i'+o])});
+    });
+    const win=(x,y)=>x==null||y==null?null:Math.abs(x-y)<0.00005?'相若':x>y?'整付':'5年繳';
+    c.push({h:'單利較高',t:'w',g:'C',v:r=>win(r.sA,r.sB)},{h:'IRR 較高',t:'w',g:'C',v:r=>win(r.iA,r.iB)});
+    return c;
+  }
+  function xTable(ws,r,cols,rows,age0,GN,title){
+    const n=cols.length;
+    if(title){ws.mergeCells(r,1,r,n);const c=ws.getCell(r,1);c.value=title;c.font={name:FN,bold:true,size:13,color:{argb:X.navy}};c.alignment={vertical:'middle'};c.border={bottom:{style:'medium',color:{argb:X.gold}}};ws.getRow(r).height=28;r++;}
+    for(let i=0;i<n;){
+      let j=i;while(j+1<n&&cols[j+1].g===cols[i].g)j++;
+      if(j>i)ws.mergeCells(r,i+1,r,j+1);
+      const c=ws.getCell(r,i+1);c.value=GN[cols[i].g];c.font={name:FN,bold:true,size:11,color:{argb:X.wh}};c.fill=fill(GC[cols[i].g].d);c.alignment={horizontal:'center',vertical:'middle'};c.border=WB;
+      i=j+1;
+    }
+    ws.getRow(r).height=24;r++;
+    cols.forEach((q,i)=>{const c=ws.getCell(r,i+1);c.value=q.h;c.fill=fill(GC[q.g].l);c.font={name:FN,bold:true,size:10,color:{argb:X.navy}};c.alignment={horizontal:'center',vertical:'middle',wrapText:true};c.border=BD;});
+    ws.getRow(r).height=34;const hr=r;r++;
+    rows.forEach((d,k)=>{
+      cols.forEach((q,i)=>xCell(ws.getCell(r,i+1),q.v(d,age0),q.t,{best:q.best&&q.best(d),zeb:k%2,bold:q.bold}));
+      ws.getRow(r).height=22;r++;});
+    return{next:r+1,hr};
+  }
+  function xBar(ws,r,ncol,t){ws.mergeCells(r,1,r,ncol);const c=ws.getCell(r,1);c.value=t;c.font={name:FN,bold:true,size:11,color:{argb:X.navy}};c.fill=fill(X.key);c.alignment={vertical:'middle',indent:1,wrapText:true};ws.getRow(r).height=30;return r+1;}
+  function xNote(ws,r,ncol,t){ws.mergeCells(r,1,r,ncol);const c=ws.getCell(r,1);c.value=t;c.font={name:FN,size:9,color:{argb:X.mut}};c.alignment={wrapText:true,vertical:'middle'};ws.getRow(r).height=18;return r+1;}
+  /* 每個情景的結論句子 */
+  function xConcl(rows,pB,age0,w){
+    const both=rows.filter(x=>x.iA!=null&&x.iB!=null);if(!both.length)return[];
+    const ok=x=>x.b+x.cB>=pB,cI=both.find(x=>x.iB>x.iA&&ok(x)),cS=both.find(x=>x.sB>x.sA&&ok(x)),L=both[both.length-1];
+    return[
+      `5年繳預繳首次高於整付的年度：IRR ${cI?'第 '+cI.n+' 年':'未出現'}、單利 ${cS?'第 '+cS.n+' 年':'未出現'}｜兩方案均有數字的 ${both.length} 個年度中，5年繳 IRR 較高 ${both.filter(x=>x.iB>x.iA).length} 個、單利較高 ${both.filter(x=>x.sB>x.sA).length} 個`,
+      `第 ${L.n} 年（${L.n+age0} 歲）：整付${w?'總回報':'退保價值'} ${fmt(L.tA)}（IRR ${pct(L.iA)}）｜5年繳預繳${w?'總回報':'退保價值'} ${fmt(L.tB)}（IRR ${pct(L.iB)}）`
+    ];
+  }
+  async function xlsx(){
+    if(typeof ExcelJS==='undefined'){alert('Excel 元件未能載入，請檢查網絡後重新整理頁面。');return;}
+    const age0=+$('issueAge').value||0,nominal=+$('nominal').value||0,pA=+$('paidA').value||1,pB=+$('paidB').value||1;
+    const client=$('client').value.trim(),today=new Date().toLocaleDateString('zh-HK'),M=plist($('ms').value);
+    const RN=calc(pA,pB,'n'),RW=calc(pA,pB,'w');
+    if(!RN.length&&!RW.length){alert('沒有可匯出的數據。');return;}
+    const sub=(client?'客戶：'+client+'｜':'')+'環宇盈活儲蓄保險計劃｜貨幣：美元｜製表日期：'+today;
+    const GN={S:'基本資料',A:'整付（實付 '+fmt(pA)+'）',B:'5年繳預繳（實付 '+fmt(pB)+'）',C:'比較'};
+    const DISC='以上為建議書「現時預計情景」數字，包含非保證金額，實際金額可能較高或較低，一切以保單契約及建議書為準。';
+    const wb=new ExcelJS.Workbook();
+
+    /* 摘要 */
+    const NC=13;
+    let ws=wb.addWorksheet('摘要',{views:[{showGridLines:false}]});
+    xInit(ws,'整付 vs 5年繳預繳｜回報對比',sub,NC,X.navy);
+    const dc=p=>nominal?'優惠約 '+pct(1-p/nominal)+'（節省 '+fmt(nominal-p)+'）':'';
+    let r=xCards(ws,4,[
+      ['名義總保費',fmt(nominal),'兩個方案相同',X.navy],
+      ['整付｜優惠後實付',fmt(pA),dc(pA),X.blue],
+      ['5年繳預繳｜優惠後一次過實付',fmt(pB),dc(pB),X.gold],
+      ['本金差額',fmt(pA-pB),'整付多付的金額',X.navy]],3);
+    [['n',RN,'不提取｜重點年度對比'],['w',RW,'提取｜重點年度對比（按建議書提取安排）']].forEach(q=>{
+      const w=q[0]==='w',rows=q[1].filter(x=>M.includes(x.n));if(!rows.length)return;
+      const cols=xCols(w,true);
+      r=xTable(ws,r,cols,rows,age0,GN,q[2]).next-1;
+      xConcl(q[1],pB,age0,w).forEach(t=>{r=xBar(ws,r,cols.length,t);});
+      r++;
+    });
+    ['★ 及金色底：該年度單利或 IRR 較高的方案。「—」：該年度沒有建議書數字。',
+     '淨賺 ＝ 退保價值 ＋ 累計提取 − 實付保費；單利 ＝ 淨賺 ÷ 實付保費 ÷ 年數。',
+     'IRR 複利：第 0 年一次過付出實付保費，提取情景下每年末收取提取金額，於該年末退保取回退保價值，所得的年複利回報率。',
+     '5 年繳預繳方案首 1–4 年的退保價值未包括尚未動用的預繳保費餘額。',
+     DISC].forEach(t=>{r=xNote(ws,r,NC,t);});
+
+    /* 逐年對比 */
+    [['n',RN,'不提取逐年對比','不提取｜逐年對比',X.teal],['w',RW,'提取逐年對比','提取｜逐年對比',X.blue]].forEach(q=>{
+      if(!q[1].length)return;
+      const w=q[0]==='w',cols=xCols(w,false),n=cols.length;
+      ws=wb.addWorksheet(q[2]);xInit(ws,q[3],sub,n,q[4]);
+      const t=xTable(ws,4,cols,q[1],age0,GN);
+      ws.views=[{state:'frozen',xSplit:2,ySplit:t.hr,showGridLines:false}];
+      ws.pageSetup.printTitlesRow=(t.hr-1)+':'+t.hr;
+      let k=xNote(ws,t.next,n,'★ 及金色底：該年度單利或 IRR 較高的方案。「—」：該年度沒有建議書數字。回報倍數 ＝ 淨賺 ÷ 實付保費。');
+      xNote(ws,k,n,DISC);
+    });
+
+    const fn=((client?client+'_':'')+'整付vs5年繳預繳_回報對比').replace(/[\\/:*?"<>|]/g,'_');
+    const buf=await wb.xlsx.writeBuffer(),a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+    a.download=fn+'.xlsx';document.body.appendChild(a);a.click();a.remove();
+    toast('✓ 已匯出 Excel');
+  }
+
+  /* ===== 事件 ===== */
+  $('mN').onclick=()=>{mode='n';render();};
+  $('mW').onclick=()=>{mode='w';render();};
+  ['nominal','paidA','paidB','issueAge'].forEach(id=>$(id).addEventListener('input',render));
+  $('ms').addEventListener('change',render);
+  $('sl').addEventListener('input',e=>{sel=R[+e.target.value].n;render();});
+  $('chips').addEventListener('click',e=>{const y=e.target.dataset.y;if(y){sel=+y;render();}});
+  $('tb').addEventListener('click',e=>{const tr=e.target.closest('tr[data-y]');if(tr){sel=+tr.dataset.y;render();}});
+  $('full').onchange=()=>table();
+  $('cols').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.k,i=K.indexOf(k);if(i>=0)K.splice(i,1);else K.push(k);table();});
+  $('colAll').onclick=()=>{K=MET.map(m=>m.k);table();};
+  $('colDef').onclick=()=>{K=KDEF.slice();table();};
+  $('tbCopy').onclick=()=>{
+    const t=[...$('tb').rows].map(tr=>[...tr.cells].map(c=>c.innerText.replace(/\s+/g,' ').trim()).join('\t')).join('\n');
+    const title='整付 vs 5年繳預繳｜'+(mode==='w'?'提取':'不提取')+'｜逐年對比\n';
+    navigator.clipboard.writeText(title+t).then(()=>toast('✓ 已複製')).catch(()=>prompt('請手動複製：',title+t));
+  };
+  $('xl').onclick=()=>xlsx().catch(e=>alert('匯出失敗：'+e.message));
+  $('pdf').addEventListener('change',e=>{const f=[...e.target.files];if(f.length)handle(f);e.target.value='';});
+  const dz=$('drop');
+  ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('over');}));
+  ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove('over');}));
+  dz.addEventListener('drop',e=>{const f=[...e.dataTransfer.files].filter(x=>/\.pdf$/i.test(x.name));if(f.length)handle(f);});
+  $('btnPaste').onclick=()=>{
+    const txt=$('paste').value;
+    if(!txt.trim()){$('status').textContent='請先貼上文字。';return;}
+    const r=analyse([txt],false,$('force').value);
+    $('status').textContent=(r.ok?'✅ ':'⚠️ ')+r.msg;render();
+  };
+  $('btnReset').onclick=()=>{D=builtin();save();$('issueAge').value=7;$('status').textContent='已還原內置數據。';toast('已還原內置數據');render();};
+  render();
+  </script>
+  </body>
+  </html>
