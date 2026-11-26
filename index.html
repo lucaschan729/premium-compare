@@ -7,50 +7,63 @@
   <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
   <style>
-  :root{--navy:#0f172a;--navy2:#1e293b;--gold:#b45309;--gold2:#f59e0b;--soft:#fffbeb;--line:#e2e8f0;--line2:#cbd5e1;--mut:#64748b;--bg:#f4f6fb;--red:#dc2626;--teal:#0f766e;--blue:#1d4ed8}
+  :root{--navy:#141a2e;--navy2:#252e4d;--gold:#c47f22;--gold2:#e8a33d;--soft:#fff8ec;--line:#e3e7f0;--line2:#cbd2e0;--mut:#6c778c;--bg:#f1f3f8;--red:#dc2626;--teal:#0f766e;--blue:#1d4ed8}
   *{box-sizing:border-box}
-  body{margin:0;font-family:-apple-system,"PingFang HK","Microsoft JhengHei","Noto Sans TC",sans-serif;background:var(--bg);color:var(--navy);-webkit-font-smoothing:antialiased;line-height:1.5}
-  header{background:radial-gradient(circle at 85% 0%,rgba(245,158,11,.28),transparent 45%),linear-gradient(135deg,#0f172a,#1e293b 60%,#273449);color:#fff;padding:40px 20px 76px}
-  .hd{max-width:1120px;margin:0 auto}
-  header h1{margin:0 0 8px;font-size:30px;letter-spacing:1px}
-  header h1 span{color:var(--gold2)}
-  header p{margin:0;color:#cbd5e1;font-size:14px}
-  main{max-width:1120px;margin:-48px auto 0;padding:0 14px 48px}
-  section{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 6px 20px rgba(15,23,42,.05)}
-  h2{margin:0 0 16px;font-size:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  h2 i{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#fff;font-size:14px;font-weight:700;flex:none}
-  h2 small{font-weight:400;color:var(--mut);font-size:12px}
+  body{margin:0;font-family:-apple-system,"PingFang HK","PingFang SC","Microsoft JhengHei","Microsoft YaHei","Noto Sans TC","Noto Sans SC",sans-serif;background:var(--bg);color:var(--navy);-webkit-font-smoothing:antialiased;line-height:1.5}
+
+  /* ---------- 頁首 ---------- */
+  header{position:relative;overflow:hidden;background:linear-gradient(135deg,#0c1322 0%,#161d33 55%,#2a3252 100%);color:#fff;padding:24px 20px 104px}
+  header::before{content:"";position:absolute;right:-200px;top:-300px;width:560px;height:560px;border-radius:50%;background:rgba(232,163,61,.10);border:90px solid rgba(232,163,61,.17);pointer-events:none}
+  header::after{content:"";position:absolute;left:-150px;bottom:-270px;width:460px;height:460px;border-radius:50%;background:rgba(255,255,255,.05);pointer-events:none}
+  .hd{max-width:1120px;margin:0 auto;position:relative;z-index:1}
+  .top{display:flex;justify-content:flex-end;margin-bottom:6px}
+  .lang{display:inline-flex;padding:4px;border-radius:99px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+  .lang button{border:0;background:transparent;color:#d9deea;font-size:14px;font-weight:600;padding:7px 18px;border-radius:99px;cursor:pointer;font-family:inherit;transition:.15s}
+  .lang button:hover{color:#fff}
+  .lang button.on{background:var(--gold2);color:#1a1f33;box-shadow:0 2px 8px rgba(232,163,61,.45)}
+  .eyebrow{font-size:12px;letter-spacing:5px;color:#f2c25c;font-weight:500;margin-bottom:8px}
+  header h1{margin:0;font-size:38px;letter-spacing:2px;font-weight:800;line-height:1.25}
+  header h1 em{font-style:normal;color:var(--gold2)}
+  header p{margin:14px 0 0;max-width:680px;color:#c6ccdb;font-size:15.5px;line-height:1.75}
+
+  main{max-width:1120px;margin:-64px auto 0;padding:0 14px 48px;position:relative;z-index:2}
+  section{background:#fff;border:1px solid #e6e9f2;border-radius:22px;padding:26px;margin-bottom:20px;box-shadow:0 1px 2px rgba(20,26,46,.04),0 12px 32px rgba(20,26,46,.08)}
+  h2{margin:0 0 18px;font-size:19px;font-weight:800;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  h2 i{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:11px;background:linear-gradient(145deg,#eeae48,#b9742a);color:#fff;font-size:16px;font-weight:800;flex:none;box-shadow:0 6px 14px rgba(196,127,34,.35)}
+  h2 small{font-weight:400;color:var(--mut);font-size:12.5px}
   .hide{display:none!important}
-  input[type=text],input[type=number],select{border:1px solid var(--line2);border-radius:9px;padding:8px 10px;font-size:14px;font-family:inherit;background:#fff;color:var(--navy);outline:none;transition:.15s}
-  input:focus,select:focus{border-color:var(--gold2);box-shadow:0 0 0 3px rgba(245,158,11,.18)}
+  input[type=text],input[type=number],select{border:1px solid var(--line2);border-radius:11px;padding:8px 10px;font-size:14px;font-family:inherit;background:#fff;color:var(--navy);outline:none;transition:.15s}
+  input:focus,select:focus{border-color:var(--gold2);box-shadow:0 0 0 3px rgba(232,163,61,.22)}
   .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
   .fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-  .fd{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fcfcfe}
+  .fd{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:#f8f9fc}
   .fd label{display:block;font-size:12px;color:var(--mut);margin-bottom:6px}
   .fd input{width:100%;font-size:17px;font-weight:700}
   .fd .hint{font-size:12px;color:var(--teal);margin-top:6px;min-height:18px}
-  .modebar{position:sticky;top:8px;z-index:30;margin-bottom:18px}
-  .tabs{display:flex;background:#fff;border:1px solid var(--line);border-radius:14px;padding:5px;box-shadow:0 8px 24px rgba(15,23,42,.12)}
-  .tabs button{flex:1;border:0;background:transparent;padding:11px;border-radius:10px;font-size:15px;font-weight:700;color:var(--mut);cursor:pointer;font-family:inherit;transition:.15s}
-  .tabs button.on{background:var(--navy);color:#fff}
+  .modebar{position:sticky;top:8px;z-index:30;margin-bottom:20px}
+  .tabs{display:flex;background:#fff;border:1px solid var(--line);border-radius:16px;padding:5px;box-shadow:0 8px 24px rgba(20,26,46,.14)}
+  .tabs button{flex:1;border:0;background:transparent;padding:11px;border-radius:12px;font-size:15px;font-weight:700;color:var(--mut);cursor:pointer;font-family:inherit;transition:.15s}
+  .tabs button.on{background:linear-gradient(135deg,#0c1322,#2a3252);color:var(--gold2);box-shadow:0 4px 12px rgba(20,26,46,.28)}
   .sel{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
   .sel b{font-size:28px}
   .sel span{font-size:18px;color:var(--gold);font-weight:700}
   input[type=range]{width:100%;accent-color:var(--gold2);margin:8px 0}
   .chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
   .chips button,.btn{border:1px solid var(--line2);background:#fff;border-radius:999px;padding:7px 14px;font-size:13px;cursor:pointer;color:var(--navy);font-family:inherit;transition:.15s}
-  .chips button:hover,.btn:hover{border-color:var(--navy)}
+  .chips button:hover,.btn:hover{border-color:var(--gold2);color:var(--gold)}
   .chips button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
-  #cols button.on,#xcols button.on{background:var(--gold);border-color:var(--gold);font-weight:600}
+  #cols button.on,#xcols button.on,#xsheets button.on{background:var(--gold2);border-color:var(--gold2);color:#1a1f33;font-weight:700}
   .btn.pri{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:600}
-  .btn.gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#fff;border-color:transparent;font-weight:700;padding:10px 22px;font-size:15px}
-  .step{border:1px solid var(--line);border-radius:14px;padding:14px 16px 4px;margin-bottom:12px;background:#fcfcfe}
+  .btn.pri:hover{color:#fff;background:var(--navy2)}
+  .btn.gold{background:linear-gradient(135deg,#eeae48,#d18a2a);color:#1a1f33;border-color:transparent;font-weight:700;padding:11px 24px;font-size:15px;border-radius:12px;box-shadow:0 6px 16px rgba(196,127,34,.35)}
+  .btn.gold:hover{color:#1a1f33;filter:brightness(1.06)}
+  .step{border:1px solid var(--line);border-radius:16px;padding:14px 16px 4px;margin-bottom:12px;background:#f8f9fc}
   .sl{font-size:14px;font-weight:700;margin-bottom:10px}
   .sl small{font-weight:400;color:var(--mut)}
   .duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-bottom:14px}
-  .pn{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fcfcfe}
+  .pn{border:1px solid var(--line);border-radius:16px;padding:14px;background:#f8f9fc}
   .pn.A{border-top:4px solid var(--blue)}
-  .pn.B{border-top:4px solid var(--gold)}
+  .pn.B{border-top:4px solid var(--gold2)}
   .ph{display:flex;align-items:center;gap:10px;margin-bottom:10px}
   .ph small{color:var(--mut);font-size:13px}
   .tag{display:inline-block;min-width:64px;text-align:center;padding:4px 12px;border-radius:999px;color:#fff;font-weight:700;font-size:12px}
@@ -59,11 +72,11 @@
   .tile{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff}
   .tile small{display:block;color:var(--mut);font-size:12px;margin-bottom:2px}
   .tile b{font-size:17px}
-  .tile.hi{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fcd34d}
+  .tile.hi{background:linear-gradient(135deg,#fff8ec,#fdebc8);border-color:#f3cf8a}
   .tile.hi b{color:var(--gold)}
-  .foot{font-size:14px;font-weight:600;background:var(--soft);border:1px solid #fcd34d;border-radius:10px;padding:10px 14px;line-height:1.9}
+  .foot{font-size:14px;font-weight:600;background:var(--soft);border:1px solid #f3cf8a;border-radius:12px;padding:10px 14px;line-height:1.9}
   .foot small{font-weight:400;color:var(--mut)}
-  .tw{overflow-x:auto;border:1px solid var(--line2);border-radius:12px}
+  .tw{overflow-x:auto;border:1px solid var(--line2);border-radius:14px}
   .tw.tall{max-height:70vh;overflow:auto}
   table{border-collapse:collapse;width:100%;font-size:14px;white-space:nowrap}
   th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line);border-right:1px solid var(--line)}
@@ -71,29 +84,46 @@
   tbody tr:last-child td{border-bottom:0}
   thead th{background:var(--navy);color:#fff;font-size:13px;font-weight:600;text-align:center;position:sticky;top:0;z-index:2}
   th.ha{background:var(--blue)}th.hb{background:var(--gold)}
-  tbody tr:nth-child(even) td{background:#f8fafc}
+  tbody tr:nth-child(even) td{background:#f8f9fc}
   tbody td:first-child{font-weight:700;text-align:center}
   td.best{background:var(--soft)!important;color:var(--gold);font-weight:700}
   td.neg{color:var(--red)}
   td.ctr{text-align:center}
-  tr.cur td{background:#fef3c7!important}
+  tr.cur td{background:#fdebc8!important}
   tr.pick{cursor:pointer}
-  tr.pick:hover td{background:#fffbeb}
+  tr.pick:hover td{background:#fff8ec}
   .note{font-size:12px;color:var(--mut);margin-top:10px;line-height:1.7}
   label.ck{font-size:13px;display:inline-flex;align-items:center;gap:4px}
-  .drop{display:block;border:2px dashed var(--gold2);background:var(--soft);border-radius:14px;padding:26px 20px;text-align:center;cursor:pointer;font-weight:600;transition:.15s}
-  .drop:hover,.drop.over{background:#fef3c7;transform:translateY(-1px)}
+  .drop{display:block;border:2px dashed var(--gold2);background:var(--soft);border-radius:16px;padding:28px 20px;text-align:center;cursor:pointer;font-weight:600;transition:.15s}
+  .drop:hover,.drop.over{background:#fdebc8;transform:translateY(-1px)}
   .drop small{display:block;font-weight:400;color:var(--mut);margin-top:4px}
   .drop input{display:none}
   .calc{background:var(--bg);border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.9}
   .calc summary{cursor:pointer;font-weight:600;color:var(--mut)}
-  #toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:10px 22px;border-radius:16px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:99;box-shadow:0 8px 24px rgba(15,23,42,.3);white-space:pre-line;max-width:92vw;line-height:1.7}
+  #toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:10px 22px;border-radius:16px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:99;box-shadow:0 8px 24px rgba(20,26,46,.3);white-space:pre-line;max-width:92vw;line-height:1.7}
   #toast.on{opacity:1;transform:translateX(-50%)}
-  @media(max-width:600px){header h1{font-size:24px}section{padding:16px}th,td{padding:8px 9px;font-size:13px}}
+  @media(max-width:600px){
+    header{padding:18px 18px 92px}
+    header h1{font-size:28px;letter-spacing:1px}
+    .eyebrow{font-size:10.5px;letter-spacing:4px}
+    header p{font-size:14px}
+    .lang button{padding:6px 14px;font-size:13px}
+    section{padding:18px;border-radius:18px}th,td{padding:8px 9px;font-size:13px}
+  }
   </style>
   </head>
   <body>
-  <header><div class="hd"><h1>整付 vs 5年繳預繳<span> 回報對比</span></h1><p>環宇盈活儲蓄保險計劃｜輸入扣除優惠後的實付金額，按建議書原數比較「不提取」及「提取」兩種情況的單利與 IRR。</p></div></header>
+  <header><div class="hd">
+    <div class="top">
+      <div class="lang noi18n" id="langSeg">
+        <button data-lang="tc" class="on">繁體</button>
+        <button data-lang="sc">简体</button>
+      </div>
+    </div>
+    <div class="eyebrow noi18n">PROPOSAL RETURN COMPARISON</div>
+    <h1>整付 vs 5年繳預繳 <em>回報對比</em></h1>
+    <p>環宇盈活儲蓄保險計劃｜輸入扣除優惠後的實付金額，按建議書原數比較「不提取」及「提取」兩種情況的單利與 IRR。</p>
+  </div></header>
   <main>
 
   <section>
@@ -106,7 +136,7 @@
   </section>
 
   <section>
-    <h2><i>2</i>匯入建議書 <small>自動分辨「不提取」與「提取」、整付與 5 年繳</small></h2>
+    <h2><i>2</i>匯入建議書 <small>繁體或簡體均可；自動分辨「不提取」與「提取」、整付與 5 年繳</small></h2>
     <label class="drop" id="drop">📄 點此選擇或拖放建議書 PDF<small>可選多份；匯入的數據會取代該方案同一情景的內置數據</small><input type="file" id="pdf" accept="application/pdf" multiple></label>
   </section>
 
@@ -139,7 +169,7 @@
   </section>
 
   <section>
-    <h2><i>5</i>匯出 Excel <small>給客戶看的對比報告</small></h2>
+    <h2><i>5</i>匯出 Excel <small>給客戶看的對比報告；語言與右上角所選的繁體／簡體一致</small></h2>
     <div class="step">
       <div class="sl">匯出哪些分頁？<small>（可多選）</small></div>
       <div class="chips" id="xsheets"></div>
@@ -217,14 +247,71 @@
     Object.assign(d.B.n,BN0);
     return d;
   }
-  const KEY='aiaCompareData_v1',AKEY='aiaCompareAge_v1';
+  const KEY='aiaCompareData_v1',AKEY='aiaCompareAge_v1',LKEY='aiaCompareLang_v1';
   function load(){try{const s=localStorage.getItem(KEY);return s?JSON.parse(s):null;}catch(e){return null;}}
   function loadAge(){try{const s=localStorage.getItem(AKEY);return s==null||isNaN(+s)?7:+s;}catch(e){return 7;}}
   function save(){try{localStorage.setItem(KEY,JSON.stringify(D));localStorage.setItem(AKEY,String(AGE));}catch(e){}}
   /* AGE：投保年齡（預設 7 歲；匯入建議書後自動按建議書更新）*/
-  let D=load()||builtin(),AGE=loadAge(),mode='w',sel=30,R=[];
+  let D=load()||builtin(),AGE=loadAge(),mode='w',sel=30,R=[],lang='tc';
 
   const $=id=>document.getElementById(id);
+  const BASE_TITLE='整付 vs 5年繳預繳 回報對比';
+
+  /* ===== 繁簡轉換（先換用語，再逐字轉換）===== */
+  const PHRASES=[['檔案','文件'],['匯出','导出'],['匯入','导入'],['網絡','网络'],['元件','组件'],['重新整理','刷新'],
+    ['預設','默认'],['分頁','工作表'],['一次過','一次性'],['列印','打印'],['儲存','保存']];
+  const T2S={};
+  ('費费 資资 計计 報报 載载 單单 議议 書书 選选 動动 寫写 總总 價价 現现 過过 輸输 點点 擊击 處处 擇择 檔档 將将 會会 裝装 內内 傳传 匯汇 滙汇 '+
+   '時时 對对 贈赠 沒没 紅红 實实 請请 證证 預预 從从 複复 製制 後后 貼贴 貸贷 銀银 數数 續续 額额 無无 優优 槓杠 桿杆 較较 細细 還还 餘余 淨净 '+
+   '開开 欄栏 於于 該该 戶户 覽览 顯显 確确 認认 儲储 為为 說说 與与 責责 聲声 償偿 當当 瀏浏 檢检 網网 絡络 連连 線线 試试 屬属 掃扫 圖图 讀读 '+
+   '個个 設设 貨货 幣币 換换 經经 齡龄 標标 碼码 護护 敗败 際际 約约 間间 須须 佔占 綠绿 項项 風风 險险 並并 隨随 場场 減减 虧亏 損损 僅仅 繳缴 '+
+   '條条 調调 擔担 準准 參参 構构 產产 錯错 誤误 體体 簡简 頁页 種种 兩两 發发 應应 據据 歲岁 觀观 樂乐 驟骤 豐丰 東东 亞亚 華华 僑侨 創创 興兴 '+
+   '國国 農农 業业 眾众 財财 務务 聯联 導导 轉转 語语 稱称 記记 結结 訂订 長长 門门 見见 馬马 萬万 億亿 雙双 幾几 樣样 這这 來来 別别 讓让 買买 '+
+   '賣卖 關关 閉闭 問问 題题 視视 劃划 壽寿 終终 誠诚 衛卫 環环 義义 類类 給给 陳陈 論论 賺赚 斷断 識识 節节 變变 獲获 達达 邊边 麼么 號号 層层 '+
+   '鍵键 級级 顏颜 範范 圍围 錄录 輯辑 黃黄 張张 劉刘 楊杨 趙赵 吳吴 鄭郑 馮冯 許许 鄧邓 葉叶 蘇苏 盧卢 蔣蒋 譚谭 羅罗 謝谢 鍾钟 龍龙 '+
+   '歐欧 鄺邝 賴赖 溫温 廖廖 顧顾 嚴严 齊齐 龐庞 韓韩 蕭萧 麥麦 鄒邹 賀贺 喬乔 竇窦 鄔邬 閻阎 駱骆 錢钱 孫孙 倫伦 偉伟 傑杰 麗丽 鳳凤').split(' ').forEach(p=>{T2S[p[0]]=p[1];});
+  const toSC=s=>{PHRASES.forEach(p=>{s=s.split(p[0]).join(p[1]);});let o='';for(const ch of s)o+=T2S[ch]||ch;return o;};
+  const loc=s=>lang==='sc'&&typeof s==='string'?toSC(s):s;
+
+  function locText(n){
+    const p=n.parentElement;
+    if(!p||p.closest('script,style,.noi18n'))return;
+    if(lang==='sc'){
+      if(n._sc!==n.nodeValue){n._tc=n.nodeValue;n._sc=toSC(n._tc);if(n._sc!==n._tc)n.nodeValue=n._sc;}
+    }else if(n._tc!=null&&n.nodeValue===n._sc){n.nodeValue=n._tc;}
+  }
+  function localize(root){
+    if(root.nodeType===3){locText(root);return;}
+    if(root.nodeType!==1)return;
+    const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),list=[];
+    while(w.nextNode())list.push(w.currentNode);
+    list.forEach(locText);
+    const phs=[...root.querySelectorAll('[placeholder]')];
+    if(root.hasAttribute('placeholder'))phs.push(root);
+    phs.forEach(el=>{
+      if(el.dataset.ph==null)el.dataset.ph=el.getAttribute('placeholder');
+      el.setAttribute('placeholder',loc(el.dataset.ph));
+    });
+  }
+  /* 自動轉換其後動態產生的文字（表格、提示等）*/
+  const mo=new MutationObserver(ms=>{
+    if(lang!=='sc')return;
+    mo.disconnect();
+    ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.isConnected)localize(n);}));
+    watch();
+  });
+  const watch=()=>mo.observe(document.body,{childList:true,subtree:true});
+  function setLang(l){
+    lang=l==='sc'?'sc':'tc';
+    mo.disconnect();
+    document.documentElement.lang=lang==='sc'?'zh-Hans':'zh-HK';
+    [...$('langSeg').children].forEach(b=>b.classList.toggle('on',b.dataset.lang===lang));
+    localize(document.body);
+    document.title=loc(BASE_TITLE);
+    try{localStorage.setItem(LKEY,lang);}catch(e){}
+    watch();
+  }
+
   const fmt=n=>n==null?'—':Math.round(n).toLocaleString('en-US');
   const pct=x=>x==null||!isFinite(x)?'—':(x*100).toFixed(2)+'%';
   const mul=x=>x==null||!isFinite(x)?'—':x.toFixed(2)+' 倍';
@@ -433,7 +520,7 @@
     }).join('');
   }
 
-  /* ===== 匯出 Excel ===== */
+  /* ===== 匯出 Excel（所有文字經 loc() 跟隨目前所選的繁體／簡體）===== */
   const X={navy:'FF0F172A',gold:'FFB45309',blue:'FF1D4ED8',teal:'FF0F766E',soft:'FFFFFBEB',key:'FFFEF3C7',zeb:'FFF8FAFC',ln:'FFD5DCE6',wh:'FFFFFFFF',mut:'FF64748B'};
   const GC={S:{d:X.navy,l:'FFE2E8F0'},A:{d:X.blue,l:'FFDBEAFE'},B:{d:X.gold,l:'FFFEF3C7'},C:{d:X.teal,l:'FFCCFBF1'}};
   const FN='Arial';
@@ -444,22 +531,22 @@
   function xInit(ws,title,sub,ncol,tab){
     for(let i=1;i<=ncol;i++)ws.getColumn(i).width=15;
     ws.getColumn(1).width=12;ws.getColumn(2).width=9;
-    ws.mergeCells(1,1,1,ncol);let c=ws.getCell(1,1);c.value=title;c.font={name:FN,bold:true,size:18,color:{argb:X.wh}};c.fill=fill(X.navy);c.alignment={vertical:'middle',indent:1};ws.getRow(1).height=38;
-    ws.mergeCells(2,1,2,ncol);c=ws.getCell(2,1);c.value=sub;c.font={name:FN,size:10,bold:true,color:{argb:X.wh}};c.fill=fill(X.gold);c.alignment={vertical:'middle',indent:1};ws.getRow(2).height=22;
+    ws.mergeCells(1,1,1,ncol);let c=ws.getCell(1,1);c.value=loc(title);c.font={name:FN,bold:true,size:18,color:{argb:X.wh}};c.fill=fill(X.navy);c.alignment={vertical:'middle',indent:1};ws.getRow(1).height=38;
+    ws.mergeCells(2,1,2,ncol);c=ws.getCell(2,1);c.value=loc(sub);c.font={name:FN,size:10,bold:true,color:{argb:X.wh}};c.fill=fill(X.gold);c.alignment={vertical:'middle',indent:1};ws.getRow(2).height=22;
     ws.getRow(3).height=8;
     ws.pageSetup={orientation:'landscape',paperSize:9,fitToPage:true,fitToWidth:1,fitToHeight:0,margins:{left:0.4,right:0.4,top:0.5,bottom:0.5,header:0.2,footer:0.2}};
-    ws.headerFooter.oddFooter='&C第 &P 頁，共 &N 頁';
+    ws.headerFooter.oddFooter=loc('&C第 &P 頁，共 &N 頁');
     ws.properties.tabColor={argb:tab};
   }
   function xCards(ws,r,cards,span){
     cards.forEach((q,i)=>{const c1=i*span+1,c2=c1+span-1;
-      [0,1,2].forEach(d=>{ws.mergeCells(r+d,c1,r+d,c2);const c=ws.getCell(r+d,c1);c.value=q[d];c.fill=fill(X.soft);c.border=WB;c.alignment={horizontal:'center',vertical:'middle'};
+      [0,1,2].forEach(d=>{ws.mergeCells(r+d,c1,r+d,c2);const c=ws.getCell(r+d,c1);c.value=loc(q[d]);c.fill=fill(X.soft);c.border=WB;c.alignment={horizontal:'center',vertical:'middle'};
         c.font=d===1?{name:FN,bold:true,size:15,color:{argb:q[3]||X.gold}}:{name:FN,size:9,color:{argb:X.mut}};});});
     ws.getRow(r).height=20;ws.getRow(r+1).height=30;ws.getRow(r+2).height=18;ws.getRow(r+3).height=10;return r+4;
   }
   function xCell(c,v,t,st){
     const bad=v==null||(typeof v==='number'&&!isFinite(v));
-    c.value=bad?'—':v;c.border=BD;
+    c.value=bad?'—':loc(v);c.border=BD;
     if(NF[t]&&!bad)c.numFmt=st.best?'"★ "'+NF[t].split(';')[0]:NF[t];
     c.alignment={horizontal:bad||t==='c'||t==='w'?'center':'right',vertical:'middle'};
     let color=X.navy,bold=!!st.bold;
@@ -490,23 +577,23 @@
   }
   function xTable(ws,r,cols,rows,age0,GN,title){
     const n=cols.length;
-    if(title){ws.mergeCells(r,1,r,n);const c=ws.getCell(r,1);c.value=title;c.font={name:FN,bold:true,size:13,color:{argb:X.navy}};c.alignment={vertical:'middle'};c.border={bottom:{style:'medium',color:{argb:X.gold}}};ws.getRow(r).height=28;r++;}
+    if(title){ws.mergeCells(r,1,r,n);const c=ws.getCell(r,1);c.value=loc(title);c.font={name:FN,bold:true,size:13,color:{argb:X.navy}};c.alignment={vertical:'middle'};c.border={bottom:{style:'medium',color:{argb:X.gold}}};ws.getRow(r).height=28;r++;}
     for(let i=0;i<n;){
       let j=i;while(j+1<n&&cols[j+1].g===cols[i].g)j++;
       if(j>i)ws.mergeCells(r,i+1,r,j+1);
-      const c=ws.getCell(r,i+1);c.value=GN[cols[i].g];c.font={name:FN,bold:true,size:11,color:{argb:X.wh}};c.fill=fill(GC[cols[i].g].d);c.alignment={horizontal:'center',vertical:'middle',wrapText:true};c.border=WB;
+      const c=ws.getCell(r,i+1);c.value=loc(GN[cols[i].g]);c.font={name:FN,bold:true,size:11,color:{argb:X.wh}};c.fill=fill(GC[cols[i].g].d);c.alignment={horizontal:'center',vertical:'middle',wrapText:true};c.border=WB;
       i=j+1;
     }
     ws.getRow(r).height=24;r++;
-    cols.forEach((q,i)=>{const c=ws.getCell(r,i+1);c.value=q.h;c.fill=fill(GC[q.g].l);c.font={name:FN,bold:true,size:10,color:{argb:X.navy}};c.alignment={horizontal:'center',vertical:'middle',wrapText:true};c.border=BD;});
+    cols.forEach((q,i)=>{const c=ws.getCell(r,i+1);c.value=loc(q.h);c.fill=fill(GC[q.g].l);c.font={name:FN,bold:true,size:10,color:{argb:X.navy}};c.alignment={horizontal:'center',vertical:'middle',wrapText:true};c.border=BD;});
     ws.getRow(r).height=34;const hr=r;r++;
     rows.forEach((d,k)=>{
       cols.forEach((q,i)=>xCell(ws.getCell(r,i+1),q.v(d,age0),q.t,{best:q.best&&q.best(d),zeb:k%2,bold:q.bold}));
       ws.getRow(r).height=22;r++;});
     return{next:r+1,hr};
   }
-  function xBar(ws,r,ncol,t){ws.mergeCells(r,1,r,ncol);const c=ws.getCell(r,1);c.value=t;c.font={name:FN,bold:true,size:11,color:{argb:X.navy}};c.fill=fill(X.key);c.alignment={vertical:'middle',indent:1,wrapText:true};ws.getRow(r).height=30;return r+1;}
-  function xNote(ws,r,ncol,t){ws.mergeCells(r,1,r,ncol);const c=ws.getCell(r,1);c.value=t;c.font={name:FN,size:9,color:{argb:X.mut}};c.alignment={wrapText:true,vertical:'middle'};ws.getRow(r).height=18;return r+1;}
+  function xBar(ws,r,ncol,t){ws.mergeCells(r,1,r,ncol);const c=ws.getCell(r,1);c.value=loc(t);c.font={name:FN,bold:true,size:11,color:{argb:X.navy}};c.fill=fill(X.key);c.alignment={vertical:'middle',indent:1,wrapText:true};ws.getRow(r).height=30;return r+1;}
+  function xNote(ws,r,ncol,t){ws.mergeCells(r,1,r,ncol);const c=ws.getCell(r,1);c.value=loc(t);c.font={name:FN,size:9,color:{argb:X.mut}};c.alignment={wrapText:true,vertical:'middle'};ws.getRow(r).height=18;return r+1;}
   /* 每個情景的結論句子 */
   function xConcl(rows,pB,age0,w){
     const both=rows.filter(x=>x.iA!=null&&x.iB!=null);if(!both.length)return[];
@@ -517,13 +604,13 @@
     ];
   }
   async function xlsx(){
-    if(typeof ExcelJS==='undefined'){alert('Excel 元件未能載入，請檢查網絡後重新整理頁面。');return;}
-    if(!XS.length){alert('請至少選擇一個要匯出的分頁。');return;}
-    if(!XK.length){alert('請至少選擇一個要匯出的事項。');return;}
+    if(typeof ExcelJS==='undefined'){alert(loc('Excel 元件未能載入，請檢查網絡後重新整理頁面。'));return;}
+    if(!XS.length){alert(loc('請至少選擇一個要匯出的分頁。'));return;}
+    if(!XK.length){alert(loc('請至少選擇一個要匯出的事項。'));return;}
     const age0=AGE,nominal=+$('nominal').value||0,pA=+$('paidA').value||1,pB=+$('paidB').value||1;
     const client=$('client').value.trim(),today=new Date().toLocaleDateString('zh-HK'),M=plist($('ms').value);
     const RN=calc(pA,pB,'n'),RW=calc(pA,pB,'w');
-    if(!RN.length&&!RW.length){alert('沒有可匯出的數據。');return;}
+    if(!RN.length&&!RW.length){alert(loc('沒有可匯出的數據。'));return;}
     const sub=(client?'客戶：'+client+'｜':'')+'環宇盈活儲蓄保險計劃｜貨幣：美元｜製表日期：'+today;
     const GN={S:'基本資料',A:'整付（實付 '+fmt(pA)+'）',B:'5年繳預繳（實付 '+fmt(pB)+'）',C:'比較'};
     const DISC='以上為建議書「現時預計情景」數字，包含非保證金額，實際金額可能較高或較低，一切以保單契約及建議書為準。';
@@ -535,7 +622,7 @@
     /* 摘要 */
     if(XS.includes('sum')){
       const NC=Math.max(12,colsN.length,colsW.length);
-      ws=wb.addWorksheet('摘要',{views:[{showGridLines:false}]});
+      ws=wb.addWorksheet(loc('摘要'),{views:[{showGridLines:false}]});
       xInit(ws,'整付 vs 5年繳預繳｜回報對比',sub,NC,X.navy);
       const dc=p=>nominal?'優惠約 '+pct(1-p/nominal)+'（節省 '+fmt(nominal-p)+'）':'';
       r=xCards(ws,4,[
@@ -562,7 +649,7 @@
       const cols=q[5];
       if(!XS.includes(q[0])||!q[1].length||cols.length<=2)return;
       const n=Math.max(cols.length,8);
-      ws=wb.addWorksheet(q[2]);xInit(ws,q[3],sub,n,q[4]);
+      ws=wb.addWorksheet(loc(q[2]));xInit(ws,q[3],sub,n,q[4]);
       const t=xTable(ws,4,cols,q[1],age0,GN);
       ws.views=[{state:'frozen',xSplit:2,ySplit:t.hr,showGridLines:false}];
       ws.pageSetup.printTitlesRow=(t.hr-1)+':'+t.hr;
@@ -570,8 +657,8 @@
       xNote(ws,k,n,DISC);
     });
 
-    if(!wb.worksheets.length){alert('按目前的選擇沒有可匯出的內容，請調整分頁或事項。');return;}
-    const fn=((client?client+'_':'')+'整付vs5年繳預繳_回報對比').replace(/[\\/:*?"<>|]/g,'_');
+    if(!wb.worksheets.length){alert(loc('按目前的選擇沒有可匯出的內容，請調整分頁或事項。'));return;}
+    const fn=loc((client?client+'_':'')+'整付vs5年繳預繳_回報對比').replace(/[\\/:*?"<>|]/g,'_');
     const buf=await wb.xlsx.writeBuffer(),a=document.createElement('a');
     a.href=URL.createObjectURL(new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
     a.download=fn+'.xlsx';document.body.appendChild(a);a.click();a.remove();
@@ -579,6 +666,7 @@
   }
 
   /* ===== 事件 ===== */
+  $('langSeg').addEventListener('click',e=>{const t=e.target.closest('button');if(t&&t.dataset.lang!==lang)setLang(t.dataset.lang);});
   $('mN').onclick=()=>{mode='n';render();};
   $('mW').onclick=()=>{mode='w';render();};
   ['nominal','paidA','paidB'].forEach(id=>$(id).addEventListener('input',render));
@@ -592,8 +680,8 @@
   $('colDef').onclick=()=>{K=KDEF.slice();table();};
   $('tbCopy').onclick=()=>{
     const t=[...$('tb').rows].map(tr=>[...tr.cells].map(c=>c.innerText.replace(/\s+/g,' ').trim()).join('\t')).join('\n');
-    const title='整付 vs 5年繳預繳｜'+(mode==='w'?'提取':'不提取')+'｜逐年對比\n';
-    navigator.clipboard.writeText(title+t).then(()=>toast('✓ 已複製')).catch(()=>prompt('請手動複製：',title+t));
+    const title=loc('整付 vs 5年繳預繳｜'+(mode==='w'?'提取':'不提取')+'｜逐年對比\n');
+    navigator.clipboard.writeText(title+t).then(()=>toast('✓ 已複製')).catch(()=>prompt(loc('請手動複製：'),title+t));
   };
   const tog=(arr,k)=>{const i=arr.indexOf(k);if(i>=0)arr.splice(i,1);else arr.push(k);};
   $('xsheets').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;tog(XS,b.dataset.k);drawX();});
@@ -601,7 +689,7 @@
   $('xAll').onclick=()=>{XK=MET.map(m=>m.k);drawX();};
   $('xDef').onclick=()=>{XK=XDEF.slice();drawX();};
   $('xSame').onclick=()=>{XK=K.slice();drawX();toast('已跟隨第 4 部分的選擇');};
-  $('xl').onclick=()=>xlsx().catch(e=>alert('匯出失敗：'+e.message));
+  $('xl').onclick=()=>xlsx().catch(e=>alert(loc('匯出失敗：')+e.message));
   $('pdf').addEventListener('change',e=>{const f=[...e.target.files];if(f.length)handle(f);e.target.value='';});
   const dz=$('drop');
   ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('over');}));
@@ -609,6 +697,9 @@
   dz.addEventListener('drop',e=>{const f=[...e.dataTransfer.files].filter(x=>/\.pdf$/i.test(x.name));if(f.length)handle(f);});
   drawX();
   render();
+  let savedLang='tc';
+  try{savedLang=localStorage.getItem(LKEY)||'tc';}catch(e){}
+  setLang(savedLang);
   </script>
   </body>
   </html>
